@@ -1,5 +1,7 @@
 package Algos.Trees;
 
+import Algos.Trees.TreeNode;
+
 public class findMAxPathSum {
     int finalAns=Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {

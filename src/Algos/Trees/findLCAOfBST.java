@@ -1,5 +1,7 @@
 package Algos.Trees;
 
+import Algos.Trees.TreeNode;
+
 public class findLCAOfBST {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root == null){
