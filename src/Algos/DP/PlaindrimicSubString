@@ -1,0 +1,18 @@
+Intuition
+Palindromic Substring is a Dynamic Programming problem where you need to find the number of palindromic substrings in it. A palindromic is a word, phrase, or number, or other sequence of characters which read the same backward and forward.
+
+For example: the string “aabaa” has 9 palindromic substrings: “a”, “a”, “aa”, “b”, “aba”, “a”, “a”, “aa”, “aabaa”. We can use various algorithms to solve this problem. Including dynamic programming, manacher’s algorithm, and others.
+
+Approach
+One straight forward approach is to generate all substrings of the string and check if substrings is a palindrome or not.
+
+In this solution, I will only discuss about the brute-force solution that has a time complexity of O(n3)O(n^3)O(n
+3
+ ) and two dynamic programming solutions that take O(n2)O(n^2)O(n
+2
+ ) time.
+
+Please keep in mind that the Manacher's Algorithm has the time complexity of O(n)O(n)O(n) and space complexity of O(n)O(n)O(n), where n is the length of the input string.
+
+
+Its better to use the expand from center technique and check the palindrome and count the total
