@@ -1,0 +1,77 @@
+https://medium.com/@patrikkaura/the-fundamentals-of-rate-limiting-how-it-works-and-why-you-need-it-fd86d39e358d
+
+Description
+Rate limiters are a way to limit the number of requests that can be made to a specific endpoint.
+This is useful for preventing abuse of your API. For example, you may want to limit the number of requests that can be made to your endpoint to prevent brute force attacks.
+They also prevent resource starvation by limiting the number of requests that can be made to a specific endpoint.
+ E.g. let’s say your API consumes another external service (e.g. ChatGPT) that is pay per use.
+You may want to limit the number of requests that can be made to this API to prevent your API from going over budget. We can talk about hard and sort rate limiting.
+
+
+Hard rate limiter — rejects all requests which are above limit
+Soft rate limiter — allows limit to be exceeded for short period of time
+In general we can say that rate limiters helps us with the following:
+
+Prevent resource starvation
+Prevent operational costs from being exceed
+
+
+Common Rate Limiters Algorithms
+In following sections, I will describe bunch of most common rate limiter algorithms.
+
+We will talk about these algorithms:
+
+1 - token bucket
+2 - leaky bucket
+3 - fixed window counter
+4 - sliding window log
+5 - sliding window counter
+
+*************** Sliding window counter
+The last algorithm covered in this article is kind of combination of fixed window counter and sliding window log.
+By this algorithm we can smooth out the spikes in traffic and also we can keep track of the traffic in the last n minutes.
+
+Algorithm can be described as follows:
+
+1. We have a window of size N minutes (in our case N=1)
+
+2. In first 10 seconds there are 5 requests. [0:00–0:10]
+
+3. In time [01:15] there are another 10 requests.
+
+4. The maximum number of requests is calculated by following formula:
+
+Requests in current window + Requests in previous window * Overlap percentage of roling and previous window
+
+5. Result is rounded to the nearest integer.
+
+Pros
+Memory efficient
+Smoothed out spikes
+
+Cons
+The method is effective only when the look-back window is not too strict.
+It provides an estimate of the true rate, as it assumes that requests within the previous window are uniformly distributed.
+
+
+******************Sliding window log
+Fixed window counter is good algorithm but has issue with allowing burst of requests to pass around edge of window.
+Sliding window counter algorithm solves this issue by moving window forward when request is made. This way we can have more accurate rate limiting.
+
+Algorithm can be described as follows:
+
+1. Create cache for timestamps e.g. Redis.
+
+2. When new request comes in remove all outdated timestamps from cache. By outdated we mean timestamps that are older than window size.
+
+3. Add new timestamp to cache.
+
+4. If number of timestamps in cache is greater than limit reject request and return 429 status code.
+
+5. If lower than limit then accept request and return 200 status code.
+
+
+Performance
+The performance of a rate limiter will depend on the algorithm used. The token bucket algorithm is the most performant.
+The fixed window counter algorithm is the least performant, but it is also the simplest. To make rate limiter performance more predictable, you can use a cache to store the rate limit information.
+Also you can use a multi-data center setup for users that are far away from your API. This will reduce the latency of the rate limiter.
